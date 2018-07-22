@@ -1,0 +1,51 @@
+<?php if(isset($this->ffDestination)):?>
+<script type="text/javascript">var ffDestination = "<?= $this->ffDestination?>"</script>
+<?php endif;?>
+<?= $this->settingValue('headScript')?>
+<meta charset="utf-8">
+<?php
+    $meta_tags = $this->meta_tags();
+    echo $this->headTitle(($meta_tags ? $meta_tags . ' - ' : '') . $this->domain)->setSeparator(' - ')->setAutoEscape(false);
+?>
+
+
+<?=$this->headMeta()->appendName('viewport', 'width=device-width, user-scalable=no')->appendHttpEquiv('X-UA-Compatible', 'IE=edge')?>
+<link rel="icon" type="image/png" sizes="32x32" href="<?= $this->basePath() . '/favicons/favicon-32x32.png'?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?= $this->basePath() . '/favicons/favicon-16x16.png'?>">
+<link rel="apple-touch-icon" sizes="180x180" href="<?= $this->basePath() . '/favicons/apple-touch-icon.png'?>">
+<link rel="mask-icon" href="<?= $this->basePath() . '/favicons/safari-pinned-tab.svg'?>" color="#8d97a7">
+<link rel="manifest" href="<?= $this->basePath() . '/favicons/site.webmanifest'?>">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="<?= $this->basePath() . '/favicons/mstile-150x150.png'?>">
+<meta name="msapplication-config" content="<?= $this->basePath() . '/favicons/browserconfig.xml'?>">
+<meta http-equiv="x-dns-prefetch-control" content="on">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
+<link rel="dns-prefetch" href="//code.jquery.com">
+<meta property="og:type" content="website" />
+<meta property="og:url" content="<?= $this->url('home/lang',[],['force_canonical' => true])?>" />
+<?php if (!$meta_tags): ?>
+<meta property="og:title" content="<?= $this->siteTitle?>">
+<meta property="og:description" content="<?= $this->description?>">
+<?php endif; ?>
+<meta property="og:image" content="<?= $this->url('home/lang',[],['force_canonical' => true]).'images/meta_thumbnail.png'?>">
+<meta name="twitter:card" content="summary_large_image">
+<?php $v = '1.5.2'?>
+<?= $this->headLink(['rel' => 'shortcut icon','type' => 'image/vnd.microsoft.icon','href' => $this->basePath() . '/favicons/favicon.ico'])
+//->appendStylesheet('https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css')
+->appendStylesheet('https://fonts.googleapis.com/css?family=Parisienne|Oswald:400|Comfortaa:400,700|Open+Sans:400,400i,600,700')
+->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.3/assets/owl.carousel.min.css')
+->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.3/assets/owl.theme.default.min.css')
+->prependStylesheet('//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css')
+->appendStylesheet('//cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/3.1.2/jquery.bootstrap-touchspin.min.css')
+->appendStylesheet($this->basePath('css/style.min.css?v=' . $v))
+->appendStylesheet($this->basePath('css/custom.css?v=' . $v))?>
+<?php
+$this->headScript()
+    ->prependFile('//cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.3/owl.carousel.min.js')
+    ->prependFile('//cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/3.1.2/jquery.bootstrap-touchspin.min.js')
+    ->prependFile('https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js')
+    ->prependFile('https://code.jquery.com/jquery-3.3.1.min.js')
+    ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js')
+    ->appendFile($this->basePath('plugins/js.cookie.min.js'))
+?>

@@ -1,0 +1,33 @@
+<?php
+return array(
+    'site' => array(
+        'domain' => 'GuruFare.com',
+        'siteTitle' => 'GuruFare® Official Website',
+        'keywords' => '',
+        'description' => '',
+        'default_locale' => 'en_US',
+        'locales' => array(
+            0 => 'en_US',
+            1 => 'es_US',
+            2 => 'fr_FR',
+        ),
+        'default_language' => 'en',
+        'languages' => array(
+            0 => array(
+                'locale' => 'en_US',
+                'code' => 'en',
+                'name' => 'English',
+            ),
+            1 => array(
+                'locale' => 'es_US',
+                'code' => 'es',
+                'name' => 'Español',
+            ),
+            2 => array(
+                'locale' => 'fr_FR',
+                'code' => 'fr',
+                'name' => 'French',
+            ),
+        ),
+    ),
+);

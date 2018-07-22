@@ -1,0 +1,22 @@
+<?= $this->doctype() ?>
+<html lang="en">
+    <head>
+    	<?= $this->partial('partial/html-head-content')?>
+    </head>
+    <body>
+        <?= $this->settingValue('bodyScript')?>
+        <?php $this->headerClass = 'header--colored'?>
+        <?= $this->partial('partial/header')?>
+    	<main class="error-page full-page <?php if(isset($this->mainClass)) echo $this->mainClass?>">
+    		<?= $this->content ?>
+		</main>
+<?= $this->headScript()?>
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+
+JS;
+$this->inlineScript()->captureEnd();
+?>
+        <?= $this->inlineScript() ?>
+    </body>
+</html>

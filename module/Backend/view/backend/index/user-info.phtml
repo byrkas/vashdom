@@ -1,0 +1,138 @@
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">User info</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/default',['action' => 'user-info'])?>" class="m-nav__link">
+						<span class="m-nav__link-text">User info actions</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<?= $this->showMessages()?>
+	<div class="m-portlet m-portlet--mobile">
+		<?php $title = 'Actions list';
+		if($this->userInfo) $title = 'Actions list <strong class="m--font-info">'.$this->userInfo['discountId'].'</strong> ('.$this->userInfo['ip'].' : '.$this->userInfo['userAgent'].') / '.$this->userInfo['created']->format('Y-m-d H:i');?>
+		<?= $this->partial('backend/partial/portlet-head',['title' => $title])?>
+		<div class="m-portlet__body">
+			<div class="row align-items-center">
+				<?= $this->partial('backend/partial/tbl-search')?>
+			</div>
+			<table id="table-data" class="m_datatable" width="100%"></table>
+		</div>
+	</div>
+</div>
+<?php
+$urlGetData = $this->url('backend/default',['action' => 'get-user-info-actions','id' => $this->id]);
+$this->inlineScript()->captureStart();
+echo <<<JS
+var DatatableRecordSelectionDemo = function() {
+    var t = function() {
+        var t = $(".m_datatable").mDatatable({
+	            data: {
+	                type: "remote",
+	                source: {
+	                    read: {
+	                        url: "$urlGetData"
+	                    }
+	                },
+	                pageSize: 20,
+	                saveState: {
+	                    cookie: !0,
+	                    webstorage: !0
+	                },
+	                serverPaging: !0,
+	                serverFiltering: !0,
+	                serverSorting: !0
+	            },
+	            layout: {
+	                theme: "default",
+	                class: "",
+	                scroll: !0,
+	                height: "auto",
+	                footer: !1
+	            },
+	            sortable: !0,
+	            toolbar: {
+	                placement: ["bottom"],
+	                items: {
+	                    pagination: {
+	                        pageSizeSelect: [5, 10, 20, 30, 50]
+	                    }
+	                }
+	            },
+                columns: [{
+                    field: "id",
+                    title: "#",
+                    width: 40,
+                    textAlign: "center",
+                },{
+                    field: "discountId",
+                    title: "Discount ID",
+                    width: 100,
+                    textAlign: "left",
+                },{
+                    field: "referer",
+                    title: "Referer",
+                    textAlign: "left",
+                    width: 350,
+                    template: function(data) {
+                        if(data.referer)
+                            return '<a class="m-link" href="' + data.referer + '" target="_blank">' + data.referer + '</a>';
+                      },
+                },{
+                    field: "ip",
+                    title: "IP",
+                    width: 100,
+                    textAlign: "left",
+                },{
+                    field: "created",
+                    width: 120,
+                    title: "Date",
+                    textAlign: "left",
+                }]
+            }),
+            e = t.getDataSourceQuery();
+        $("#m_form_search").on("keyup", function(e) {
+            var a = t.getDataSourceQuery();
+            a.generalSearch = $(this).val().toLowerCase(), t.setDataSourceQuery(a), t.load()
+        }).val(e.generalSearch),
+        $(".m_datatable").on("m-datatable--on-check", function(e, a) {
+            var l = t.setSelectedRecords().getSelectedRecords().length;
+            $("#m_datatable_selected_number").html(l), l > 0 && $("#m_datatable_group_action_form").collapse("show")
+        }).on("m-datatable--on-uncheck m-datatable--on-layout-updated", function(e, a) {
+            var l = t.setSelectedRecords().getSelectedRecords().length;
+            $("#m_datatable_selected_number").html(l), 0 === l && $("#m_datatable_group_action_form").collapse("hide")
+        })
+    };
+    return {
+        init: function() {
+            t()
+        }
+    }
+}();
+
+function deleteData(url, postData, t){
+	$.post( url, postData, function( data ) {
+	  if(data.success){
+		  t.reload();
+	  }
+	}, "json");
+}
+
+jQuery(document).ready(function() {
+    DatatableRecordSelectionDemo.init()
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

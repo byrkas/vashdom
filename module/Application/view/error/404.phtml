@@ -1,0 +1,6 @@
+<div class="error-block">
+    <div class="error-block__img"></div>
+    <h2 class="error-block__title">404</h2>
+    <div class="error-block__text"><?= $this->translate('Page not found')?></div>
+    <a href="<?= $this->url('home/lang',['lang' => $this->layout()->lang])?>" class="btn error-block__btn"><?= $this->translate('Back home')?></a>
+</div>

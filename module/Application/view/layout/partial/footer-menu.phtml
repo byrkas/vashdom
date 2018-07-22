@@ -1,0 +1,29 @@
+<?php $container = $this->container;?>
+<div class="footer-menu">
+    <?php foreach ($container as $page): ?>
+    	<?php if($page->__isset('params')){
+    	    $params = $page->getParams();
+    	    $params['lang'] = $this->layout()->lang;
+    	    $page->setParams($params);
+    	}?>
+    	<ul class="footer-menu__col">
+        <?php if (!$this->navigation()->accept($page)) continue; ?>
+        	<?php $hasChildren = $page->hasPages() ?>
+        	<?php if ($hasChildren): ?>
+            	<li class="footer-menu__subtitle"><?= $this->translate($page->getLabel()) ?></li>
+            	<?php foreach ($page->getPages() as $child):?>
+            	<?php if($child->__isset('params')) {
+        		    $params = $child->getParams();
+            	    $params['lang'] = $this->layout()->lang;
+            	    $child->setParams($params);
+            	}?>
+            	<li class="footer-menu__link <?php if ($child->isActive()) echo ' active' ?>">
+    				<a href="<?= $child->getHref() ?>"<?php if ($child->getTarget() != ""): ?> target="<?= $child->getTarget(); ?>"<?php endif; ?>>
+    				<?= $this->translate($child->getLabel()) ?>
+					</a>
+    			</li>
+            	<?php endforeach ?>
+        	<?php endif;?>
+    	</ul>
+        <?php endforeach ?>
+</div>

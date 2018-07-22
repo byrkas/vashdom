@@ -1,0 +1,14 @@
+{
+    "name": "Wowfare",
+    "short_name": "Wowfare",
+    "icons": [
+        {
+            "src": "/android-chrome-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#1c2f59",
+    "background_color": "#1c2f59",
+    "display": "standalone"
+}

@@ -1,0 +1,12 @@
+<?php if($this->navigation('Zend\Navigation\Default')->findOneBy('id',$this->slug)) $this->navigation('Zend\Navigation\Default')->findOneBy('id',$this->slug)->set('active',1)?>
+<div class="cover cover--static">
+	<?= $this->partial('partial/trustpilot-block')?>
+    <article class="article">
+        <h1 class="page-title"><?= $this->page['title']?></h1>
+        <div class="article__content">
+            <div class="article__body">
+                <?= $this->page['content']?>
+            </div>
+        </div>
+    </article>
+</div>

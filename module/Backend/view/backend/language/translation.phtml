@@ -1,0 +1,106 @@
+<?php $this->headScript()->appendFile('https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js');
+$this->headLink()->appendStylesheet('https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+?>
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">Languages</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/language')?>" class="m-nav__link">
+						<span class="m-nav__link-text">Languages</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<?= $this->showMessages()?>
+	<form action="" method="post">
+	<div class="m-portlet m-portlet--brand m-portlet--head-solid-bg m-portlet--bordered">
+		<div class="m-portlet__head">
+        	<div class="m-portlet__head-caption">
+        		<div class="m-portlet__head-title">
+        			<h3 class="m-portlet__head-text">Translations - <?= $this->language?></h3>
+        		</div>
+        	</div>
+        	<div class="m-portlet__head-tools">
+        		<a class="btn btn-primary" href="<?= $this->url('backend/language',['action' => 'update-translation','id' => $id])?>"><?= $this->translate('Update') ?></a>
+           		<input class="btn btn-success" type="submit" name="save" value="Save">
+           		<button type="button" class="btn btn-warning m-loader--light m-loader--right" id="commit-push" data-text="Commit and Push" data-loading-text="Loading..">Commit and Push</button>
+        	</div>
+        </div>
+		<div class="m-portlet__body">
+			<table id="table-data" class="m_datatable lang-table" width="100%">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Source text</th>
+						<th>Translate</th>
+					</tr>
+				</thead>
+				<tbody>
+        			<?php $n = 1?>
+        			<?php $escaper = new Zend\Escaper\Escaper('utf-8');?>
+					<?php foreach($this->translations as $entry):?>
+					<tr>
+						<td style="width:50px;"><?= $n++; ?></td>
+						<td style="width:40%">
+							<?php if($entry->hasPlural()):?>
+                            <ol>
+                               <li><textarea readonly><?= $entry->getOriginal();?></textarea></li>
+                               <li><textarea readonly><?= $entry->getPlural()?></textarea></li>
+                            </ol>
+                            <?php else:?>
+                                <textarea readonly><?= $entry->getOriginal(); ?></textarea>
+                            <?php endif;?>
+						</td>
+						<td>
+							<textarea name="translate[<?= $escaper->escapeHtmlAttr($entry->getOriginal())?>]"><?= $entry->getTranslation()?></textarea>
+                            <?php if($entry->hasPlural()):?>
+                                <?php foreach ($entry->getPluralTranslations() as $pT):?>
+                                <textarea name="translatePlural[<?= $escaper->escapeHtmlAttr($entry->getOriginal())?>][]"><?= $pT?></textarea>
+                                <?php endforeach;?>
+                            <?php endif;?>
+						</td>
+					</tr>
+					<?php endforeach;?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</form>
+</div>
+<?php
+$urlPush = $this->url('home/api',['action' => 'translation-save']);
+$this->inlineScript()->captureStart();
+echo <<<JS
+toastr.options = {
+  "positionClass": "toast-top-center",
+}
+
+jQuery(document).ready(function() {
+    var table = $('#table-data').DataTable();
+
+    $('#commit-push').on('click', function() {
+        $(this).text($(this).data('loading-text'));
+        $(this).attr('disabled',true);
+        $(this).addClass('m-loader');
+        $.get("$urlPush").done(function( data ) {
+            toastr.warning(data);
+            $('#commit-push').text($('#commit-push').data('text'));
+            $('#commit-push').removeAttr('disabled');
+            $('#commit-push').removeClass('m-loader');
+        });
+    });
+} );
+JS;
+$this->inlineScript()->captureEnd();
+?>

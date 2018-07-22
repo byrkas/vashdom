@@ -1,0 +1,158 @@
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">Quotes</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/default',['action'=>'quotes'])?>" class="m-nav__link">
+						<span class="m-nav__link-text">Quotes</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="" class="m-nav__link">
+						<span class="m-nav__link-text">View checkout</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<div class="m-portlet m-portlet--info m-portlet--head-solid-bg m-portlet--bordered">
+		<div class="m-portlet__head">
+        	<div class="m-portlet__head-caption">
+        		<div class="m-portlet__head-title">
+        			<h3 class="m-portlet__head-text">
+        				<?= 'Checkout info Quote #'.$this->quoteId?>
+        			</h3>
+        		</div>
+        	</div>
+    		<div class="m-portlet__head-tools">
+    			<a href="<?= $this->url('backend/default',['action'=>'view-quote','id' => $quoteId])?>" class="btn m-btn m-btn--gradient-from-success m-btn--gradient-to-accent">Quote info</a>
+    		</div>
+        </div>
+		<div class="m-portlet__body">
+			<h5 class="m-form__heading-title">Price Quote #<?= $this->data['priceQuote']['id']?></h5>
+			<div class="row">
+				<div class="col-md-5 form-group pull-right">
+					<label>Dump</label>
+					<textarea rows="5" class="form-control"><?= $this->data['priceQuote']['dump']?></textarea>
+				</div>
+				<div class="col-md-7">
+					<div class="row">
+						<div class="col-md-4 form-group">
+        					<label>Ticket Fare</label>
+        					<span class="form-control">$ <?= $this->data['priceQuote']['ticketFare']?></span>
+        				</div>
+        				<div class="col-md-4 form-group">
+        					<label>Tax and Fees</label>
+        					<span class="form-control">$ <?= $this->data['priceQuote']['serviceFee']?></span>
+        				</div>
+        				<div class="col-md-2 form-group">
+        					<label>Carrier</label>
+        					<span class="form-control"><?= $this->data['priceQuote']['carrier']?></span>
+        				</div>
+        				<div class="col-md-2 form-group">
+        					<label>Cabin</label>
+        					<span class="form-control"><?= $this->data['priceQuote']['cabin']?></span>
+        				</div>
+					</div>
+				</div>
+			</div>
+
+			<h5 class="m-form__heading-title">Customer Info:</h5>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label>Email</label>
+					<span class="form-control"><?= $this->data['email']?></span>
+				</div>
+				<div class="col-md-6 form-group">
+					<label>Phone</label>
+					<span class="form-control"><?= $this->data['phone']?></span>
+				</div>
+			</div>
+			<?php foreach ($this->data['Passengers'] as $key => $passenger):?>
+			<h5 class="m-form__heading-title">Passenger <?= $key+1?> Details:</h5>
+			<div class="row">
+				<div class="col-md-4 form-group">
+					<label>First name</label>
+					<span class="form-control"><?= $passenger->firstName?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>Middle name</label>
+					<span class="form-control"><?= $passenger->middleName?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>Last name</label>
+					<span class="form-control"><?= $passenger->lastName?></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 form-group">
+					<label>Nationality</label>
+					<span class="form-control"><?= $passenger->nationality?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>Birth Date</label>
+					<span class="form-control"><?= $passenger->birthDate->format('Y-m-d')?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>Gender</label>
+					<span class="form-control"><?= $passenger->gender?></span>
+				</div>
+			</div>
+			<?php endforeach;?>
+			<h5 class="m-form__heading-title">Billing Details</h5>
+			<div class="row">
+				<div class="col-md-4 form-group">
+					<label>Country</label>
+					<span class="form-control"><?= $this->data['country']?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>State / Province</label>
+					<span class="form-control"><?= $this->data['state']?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>City</label>
+					<span class="form-control"><?= $this->data['city']?></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8 form-group">
+					<label>Street Address</label>
+					<span class="form-control"><?= $this->data['address']?></span>
+				</div>
+				<div class="col-md-4 form-group">
+					<label>Zip / Postal Code</label>
+					<span class="form-control"><?= $this->data['zip']?></span>
+				</div>
+			</div>
+			<h5 class="m-form__heading-title">Credit card information</h5>
+			<div class="row">
+				<div class="col-md-3 form-group">
+					<label>Cardholder's Name</label>
+					<span class="form-control"><?= $this->data['cardName']?></span>
+				</div>
+				<div class="col-md-3 form-group">
+					<label>Card Number</label>
+					<span class="form-control"><?= $this->data['cardNumber']?></span>
+				</div>
+				<div class="col-md-3 form-group">
+					<label>Expiration Date</label>
+					<span class="form-control"><?= $this->data['expirationDate']?></span>
+				</div>
+				<div class="col-md-3 form-group">
+					<label>Security Code</label>
+					<span class="form-control"><?= $this->data['securityCode']?></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

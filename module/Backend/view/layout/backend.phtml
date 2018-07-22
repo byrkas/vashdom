@@ -1,0 +1,139 @@
+<?= $this->doctype() ?>
+<html lang="en" ng-app>
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('Travel outlet Backend')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+		<script>
+          WebFont.load({
+            google: {"families":["Poppins:300,400,500,600,700","Roboto:300,400,500,600,700"]},
+            active: function() {
+                sessionStorage.fonts = true;
+            }
+          });
+		</script>
+        <!-- Le styles -->
+        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/backend-theme/img/favicon.ico'])
+            ->prependStylesheet($this->basePath('backend-theme/assets/demo/demo5/base/style.bundle.css'))
+            ->prependStylesheet($this->basePath('backend-theme/assets/vendors/base/vendors.bundle.css'))
+            ->appendStylesheet($this->basePath('backend-theme/style.css?v=1.0.3'))
+            ->appendStylesheet($this->basePath('backend-theme/custom.css?v=1.0.2'))
+        ?>
+
+        <!-- Scripts -->
+        <?php $this->headScript()
+        ->prependFile($this->basePath('backend-theme/assets/demo/default/base/scripts.bundle.js'))
+        ->prependFile($this->basePath('backend-theme/assets/vendors/base/vendors.bundle.js'))
+        ?>
+    </head>
+    <body class="m-page--wide m-header--fixed m-header--fixed-mobile m-footer--push m-aside--offcanvas-default">
+    	<div class="m-grid m-grid--hor m-grid--root m-page">
+    		<?= $this->partial('backend/partial/header')?>
+    		<div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor-desktop m-grid--desktop m-body">
+				<div class="m-grid__item m-grid__item--fluid  m-grid m-grid--ver m-container m-container--responsive m-container--xxl m-page__container">
+					<div class="m-grid__item m-grid__item--fluid m-wrapper">
+						<?= $this->content ?>
+					</div>
+				</div>
+			</div>
+    		<?= $this->partial('backend/partial/footer')?>
+    	</div>
+
+		<div class="m-scroll-top m-scroll-top--skin-top" data-toggle="m-scroll-top" data-scroll-offset="500" data-scroll-speed="300">
+			<i class="la la-arrow-up"></i>
+		</div>
+<?= $this->headScript();?>
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+var Select2 = function() {
+    var e = function() {
+            $(".m-select2, .select2multiple").select2();
+        };
+    return {
+        init: function() {
+            e()
+        }
+    }
+}();
+function add_field(name,index,max) {
+    max = typeof max !== 'undefined' ? max: 0;
+    var currentCount = $('#'+name+'  fieldset').length ;
+    if((max > 0 && max > currentCount) || max == 0){
+        var template = $('#'+name+'  > span').data('template');
+        var re = new RegExp("__"+index+"__","g");
+        template = $($(template.replace(re, currentCount)));
+        $('#'+name+' ').append(template);
+        Select2.init(),
+        showHideFieldsetTitle(name);
+    }
+    return false;
+}
+function remove_button(e, name, min)
+{
+    min = typeof min !== 'undefined' ? min: 0;
+    name = typeof name !== 'undefined' ? name: '';
+    if(name == ''){
+        $(e).closest("fieldset").remove();
+    }
+    else if(name!=''){
+        if(min>0){
+            var currentCount = $('#'+name+' fieldset').length ;
+            if(currentCount > min)
+                $(e).closest("fieldset").remove();
+        }else{
+            $(e).closest("fieldset").remove();
+        }
+    }
+    showHideFieldsetTitle(name);
+    return false;
+}
+function confirmRemove(obj,txt, callback){
+    $(obj).closest("fieldset").addClass('to-remove');
+    var name = $(obj).parent().parent().attr('id');
+    if(confirm(txt)){
+        if (callback) {
+            callback();
+        }
+        return remove_button(obj,name);
+    }else{
+        $(obj).closest("fieldset").removeClass('to-remove');
+    }
+}
+function showHideFieldsetTitle(name){
+    if(name != ''){
+        var currentCount = $('#'+name+' fieldset').length ;
+        if(currentCount > 0){
+            $('#'+name).parent().find('.fieldset-title').show();
+        }else{
+            $('#'+name).parent().find('.fieldset-title').hide();
+        }
+    }
+   }
+jQuery(document).ready(function() {
+    Select2.init(),
+    $(".summernote").summernote({
+        height: 150
+    });
+    $('.datepicker').datepicker({
+        todayHighlight: true,
+        orientation: "bottom left",
+        format: "yyyy-mm-dd",
+        clearBtn: true,
+        templates: {
+            leftArrow: '<i class="la la-angle-left"></i>',
+            rightArrow: '<i class="la la-angle-right"></i>'
+        }
+    });
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>
+        <?= $this->inlineScript() ?>
+    </body>
+</html>

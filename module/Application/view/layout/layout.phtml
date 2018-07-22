@@ -1,0 +1,30 @@
+<?= $this->doctype() ?>
+<html lang="en">
+    <head>
+    	<?= $this->partial('partial/html-head-content')?>
+    </head>
+    <body>
+        <?= $this->settingValue('bodyScript')?>
+        <?= $this->partial('partial/header')?>
+    	<main class="<?php if(isset($this->mainClass)) echo $this->mainClass?>">
+    		<?= $this->content ?>
+		</main>
+        <?= $this->partial('partial/footer')?>
+<?= $this->headScript()?>
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(function(){
+$(document).on('click', '.smooth-scroll', function (event) {
+            event.preventDefault();
+
+            $('html, body').animate({
+                scrollTop: $($.attr(this, 'href')).offset().top
+            }, 300);
+        });
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>
+        <?= $this->inlineScript() ?>
+    </body>
+</html>

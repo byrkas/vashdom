@@ -1,0 +1,14 @@
+<?= $this->doctype() ?>
+<html lang="en">
+    <head>
+    	<?= $this->partial('partial/html-head-content.phtml')?>
+    </head>
+    <body>
+        <?= $this->settingValue('bodyScript')?>
+    	<main class="main-content">
+        <?= $this->content ?>
+		</main>
+		<?= $this->headScript()?>
+        <?= $this->inlineScript() ?>
+    </body>
+</html>

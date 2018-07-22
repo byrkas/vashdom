@@ -1,0 +1,22 @@
+<?php $this->headTitle($this->news['title']);?>
+<div class="cover cover--static">
+    <div class="cover-content">
+        <div class="container">
+            <h1 class="page-title"><?= $this->translate('Latest news')?></h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= $this->url('home/lang',['lang' => $this->layout()->lang])?>">Home</a></li>
+                <li class="breadcrumb-item"><a href="<?= $this->url('home/news_archive',['lang' => $this->layout()->lang])?>"><?= $this->translate('news')?></a></li>
+                <li class="breadcrumb-item active"><?= $this->news['title']?></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="content content-static">
+    <div class="container">
+        <article class="news-article article">
+            <div class="news-article__date"><?= $this->news['publishDate']->format('m/d/Y')?></div>
+            <h2 class="news-article__title"><?= $this->news['title']?></h2>
+            <?= $this->news['content']?>
+        </article>
+    </div>
+</div>

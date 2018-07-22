@@ -1,0 +1,122 @@
+.form-group.has-error .help-block{
+    font-weight: 400;
+    font-size: .85rem;
+    padding-left: 0;
+    color: #f4516c;
+	list-style:none;
+}
+.hidden{visibility:hidden;height:0;}
+.file-preview img{max-width:300px;}
+.m-btn--icon.m-btn--icon-only > span {
+    line-height: 0;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+#cityPack fieldset{margin:5px;}
+
+.m-typeahead .twitter-typeahead {
+    display: block !important;
+}
+
+.tt-menu {
+    border: 0;
+    margin: 0;
+    min-width: 275px;
+    padding: 5px 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.tt-menu .tt-dataset .tt-suggestion {
+    padding: 5px 15px;
+    font-size: 13px;
+}
+
+.form-control.tt-hint {
+    color: #7b7e8a;
+}
+
+.tt-menu {
+    background: #ffffff;
+    -webkit-box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+    -moz-box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+    box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+}
+
+.tt-menu .tt-dataset .tt-suggestion {
+    color: #575962;
+    cursor: pointer;
+}
+
+.tt-menu .tt-dataset .tt-suggestion .tt-highlight {
+    color: #27282c;
+    font-weight: 500;
+}
+
+.tt-menu .tt-dataset .tt-suggestion:hover {
+    background: #f4f5f8;
+}
+.form-control.form-control-warning{border-color:#ffb822;}
+.lang-table textarea{width:100%;}
+
+/* The Modal (background) */
+.myModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 999999; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.myModal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Content */
+.myModal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

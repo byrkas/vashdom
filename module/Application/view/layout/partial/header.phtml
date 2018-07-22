@@ -1,0 +1,51 @@
+<header class="header<?php if(isset($this->layout()->headerClass)) echo " ".$this->headerClass?>">
+    <div class="header__wrapper navbar">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="logo" href="<?= $this->url('home/lang',['lang' => $this->layout()->lang])?>">
+            <img src="/images/logo.svg" alt="<?= $this->layout()->siteName?>" class="logo__img logo__img--light">
+            <img src="/images/logo-colored.svg" alt="<?= $this->layout()->siteName?>" class="logo__img logo__img--colored">
+        </a>
+
+		<span class="header__phone">
+            <span class="header__phone-label"><?= $this->translate('Call 24/7')?></span>
+            <a href="tel:<?= $this->settingValue('phone')?>" class="header__phone-num"><?= $this->settingValue('phone')?></a>
+        </span>
+
+        <div class="header__menu menu collapse navbar-collapse" id="menu">
+            <a href="#" class="menu__close" data-toggle="collapse" data-target="#menu"></a>
+             <?= $this->navigation('Zend\Navigation\Default')->menu()->setUlClass('menu__list navbar-nav')->setPartial('partial/menu')?>
+            <div class="menu__footer">
+                <div class="menu__footer-text"><?= $this->translate('Need instant Help? Call for a deal right Now')?></div>
+                <a href="tel:<?= $this->settingValue('phone')?>" class="menu__phone"><i class="icn-phone-circle"></i> <?= $this->settingValue('phone')?></a>
+            </div>
+        </div>
+    </div>
+</header>
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(function(){
+    var menu = $('#menu');
+    menu.on({
+        'show.bs.collapse': function () {
+            $('html').addClass('fixed-sm')
+        },
+        'hidden.bs.collapse': function () {
+            $('html').removeClass('fixed-sm')
+        }
+    });
+
+    $(document).click(function (event) {
+        if (!$(event.target).closest(menu).length) {
+            if (menu.is(".show")) {
+                menu.collapse('hide');
+            }
+        }
+    });
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>
+<?php $this->headScript()->appendFile($this->url('home/get_discount'))?>

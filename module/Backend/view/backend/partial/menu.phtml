@@ -1,0 +1,75 @@
+<?php $container = $this->container;?>
+<ul class="m-menu__nav  m-menu__nav--submenu-arrow <?= $this->navigation()->menu()->getUlClass(); ?>">
+    <?php foreach ($container as $page): ?>
+        <?php if (!$this->navigation()->accept($page)) continue; ?>
+        <?php $hasChildren = $page->hasPages() ?>
+        <?php if (!$hasChildren): ?>
+        <li class="m-menu__item<?php if ($page->isActive()) echo ' m-menu__item--active' ?>">
+        	<a class="m-menu__link" href="<?= $page->getHref() ?>"<?php if ($page->getTarget() != ""): ?> target="<?= $page->getTarget(); ?>"<?php endif; ?>>
+            	<span class="m-menu__item-here"></span>
+            	<?php if($page->get("icon") !== "" && $page->get("icon") !== null): ?><span class="<?= $page->get("icon"); ?>"></span><?php endif; ?>
+            	<span class="m-menu__link-text"><?= $page->getLabel() ?></span>
+        	</a>
+    	</li>
+        <?php else:
+	   $access = false;
+	    foreach ($page->getPages() as $child) {
+	        if ($this->navigation()->accept($child) && $child->get("separator") !== true) {
+	            $access = true;
+	        }
+	    }
+	if ($access) :?>
+	<li class="m-menu__item  m-menu__item--submenu m-menu__item--rel<?php if ($page->isActive(true)) echo ' active' ?>"  data-menu-submenu-toggle="click" aria-haspopup="true">
+		<a class="m-menu__link m-menu__toggle">
+			<span class="m-menu__item-here"></span>
+            <span class="m-menu__link-text"><?= $page->getLabel() ?></span>
+			<i class="m-menu__hor-arrow la la-angle-down"></i>
+			<i class="m-menu__ver-arrow la la-angle-right"></i>
+		</a>
+        <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+    		<span class="m-menu__arrow m-menu__arrow--adjust"></span>
+    		<ul class="m-menu__subnav">
+    		<?php foreach ($page->getPages() as $child):
+    		if ($child->get("separator") === true): ?>
+    			<li class="divider"></li>
+    		<?php endif;?>
+    		<?php $hasChildrenCh = $child->hasPages(); ?>
+    		<?php if(!$hasChildrenCh):?>
+    			<li class="m-menu__item<?php if ($child->isActive()) echo ' active' ?>">
+    				<a class="m-menu__link " href="<?= $child->getHref() ?>"<?php if ($child->getTarget() != ""): ?> target="<?= $child->getTarget(); ?>"<?php endif; ?>>
+    				<?php if ($child->get("icon") !== "" && $child->get('icon') !== null): ?><span class="<?= $child->get("icon"); ?>"></span><?php endif; ?>
+    				<span class="m-menu__link-text"><?= $child->getLabel() ?></span>
+					</a>
+    			</li>
+    		<?php else:?>
+    			<li class="m-menu__item  m-menu__item--submenu" data-menu-submenu-toggle="hover" data-redirect="true" aria-haspopup="true">
+    				<a class="m-menu__link m-menu__toggle" href="<?= $child->getHref() ?>"<?php if ($child->getTarget() != ""): ?> target="<?= $child->getTarget(); ?>"<?php endif; ?>>
+    				<span class="m-menu__link-text"><?= $child->getLabel()?></span>
+    				<i class="m-menu__hor-arrow la la-angle-right"></i>
+    				<i class="m-menu__ver-arrow la la-angle-right"></i>
+					</a>
+    				<div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--right">
+						<span class="m-menu__arrow "></span>
+						<ul class="m-menu__subnav">
+        			  	<?php foreach ($child->getPages() as $childCh): ?>
+        					<li class="m-menu__item <?php if ($childCh->isActive()) echo ' active' ?>"  data-redirect="true" aria-haspopup="true">
+        						<a class="m-menu__link " href="<?= $childCh->getHref() ?>" <?php if ($childCh->getTarget() != ""): ?>target="<?= $childCh->getTarget(); ?>"<?php endif; ?> >
+        				                    <?php if ($childCh->get("icon") !== "" && $childCh->get('icon')): ?>
+        				                    <span class="<?= $childCh->get("icon"); ?>"></span>
+        				                    <?php endif; ?>
+        				                    <span class="m-menu__link-text"><?= $childCh->getLabel() ?></span>
+        				                </a>
+                    				</li>
+                   			<?php endforeach;?>
+        				</ul>
+    				</div>
+    			</li>
+    		<?php endif; ?>
+                    <?php endforeach; ?>
+    		</ul>
+		</div>
+	</li>
+        <?php endif;
+    endif;
+    endforeach ?>
+</ul>

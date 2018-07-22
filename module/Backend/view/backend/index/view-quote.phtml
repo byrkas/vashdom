@@ -1,0 +1,345 @@
+<?php $this->headScript()
+->appendFile($this->basePath('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'))
+->appendFile($this->basePath('js/typeahead.bundle.min.js'))
+->appendFile($this->basePath('js/handlebars.min.js'));
+$this->headLink()->appendStylesheet($this->basePath('backend-theme/custom.css'))
+    ->appendStylesheet($this->basePath('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css'))?>
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">Quotes</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/default',['action'=>'quotes'])?>" class="m-nav__link">
+						<span class="m-nav__link-text">Quotes</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="" class="m-nav__link">
+						<span class="m-nav__link-text">View quote</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<?php $form->prepare(); echo $this->form()->openTag($form);?>
+	<div class="m-portlet m-portlet--info m-portlet--head-solid-bg m-portlet--bordered">
+		<div class="m-portlet__head">
+        	<div class="m-portlet__head-caption">
+        		<div class="m-portlet__head-title">
+        			<h3 class="m-portlet__head-text">
+        				<?= 'View quote (created on '.$this->created.')'?>
+        			</h3>
+        		</div>
+        	</div>
+        	<?php if($this->hasCheckout):?>
+    		<div class="m-portlet__head-tools">
+    			<a href="<?= $this->url('backend/default',['action'=>'view-checkout','id' => $id])?>" class="btn m-btn m-btn--gradient-from-success m-btn--gradient-to-accent">Checkout info</a>
+    		</div>
+    		<?php endif;?>
+        </div>
+		<div class="m-portlet__body">
+			<?= $this->showMessages()?>
+			<?= $this->formRow($form->get('agent'));?>
+			<div class="">
+				<h5 class="m-form__heading-title">Customer Info:</h5>
+    			<div class="row">
+                	<div class="col-md-4"><?= $this->formRow($form->get('name'));?></div>
+                	<div class="col-md-4"><?= $this->formRow($form->get('email'));?></div>
+                	<div class="col-md-4"><?= $this->formRow($form->get('phone'));?></div>
+            	</div>
+			</div>
+
+        	<div id="flights" class="">
+        		<h5 class="m-form__heading-title">Flight Info:</h5>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group search-form__trip-type js-trip-type<?php if($form->get('tripType')->getMessages()) echo " has-error"?>">
+                        	<?= $this->formlabel($form->get('tripType'))?>
+                        	<div class="m-radio-inline"><?= $this->formelement($form->get('tripType'))?></div>
+        					<?= $this->formelementerrors($form->get('tripType'),['class' => 'help-block'])?>
+                        </div>
+					</div>
+					<div class="col-md-3"><?= $this->formRow($form->get('cabin'));?></div>
+					<div class="col-md-2"><?= $this->formRow($form->get('adults'));?></div>
+					<div class="col-md-2"><?= $this->formRow($form->get('children'));?></div>
+				</div>
+                <div class="search-form__tabs">
+                    <div class="search-form__tab<?php if($form->get('tripType')->getValue() != 'mc'):?> search-form__tab--mc js-tab-mc<?php else:?> search-form__tab--ow js-tab-rt-ow<?php endif;?>">
+                        <?php foreach ($form->get('QuoteFlights') as $key => $flightFieldset):?>
+                        <?php
+                            $flightFieldset->get('departure')->setAttribute('id', $flightFieldset->get('departure')->getAttribute('id').'-'.($key+1));
+                            $flightFieldset->get('origin')->setAttribute('id', $flightFieldset->get('origin')->getAttribute('id').'-'.($key+1));
+                            $flightFieldset->get('fromText')->setAttribute('id',$flightFieldset->get('fromText')->getAttribute('id').'-'.($key+1));
+                            $flightFieldset->get('destination')->setAttribute('id',$flightFieldset->get('destination')->getAttribute('id').'-'.($key+1));
+                            $flightFieldset->get('toText')->setAttribute('id',$flightFieldset->get('toText')->getAttribute('id').'-'.($key+1));
+                        ?>
+                        <div class="search-form__row js-mc-row row">
+                            <span class="search-form__mc-row-nr"><?= $key+1?></span>
+                            <a href="javascript:void(0)" onclick="removeCityPart(this)" class="search-form__mc-row-del js-del-row"></a>
+                            <div class="form-group origin-group <?php if($flightFieldset->get('origin')->getMessages()) echo "has-error"?>">
+                                <?= $this->formelement($flightFieldset->get('origin'));?>
+                                <?php $flightFieldset->get('fromText')->setValue($flightFieldset->get('origin')->getValue())?>
+                                <?= $this->formelement($flightFieldset->get('fromText'));?>
+                                <?= $this->formelementerrors($flightFieldset->get('origin'),['class' => 'help-block'])?>
+                            </div>
+                            <div class="form-group destination-group <?php if($flightFieldset->get('destination')->getMessages()) echo "has-error"?>">
+                                <?= $this->formelement($flightFieldset->get('destination'));?>
+                                <?php $flightFieldset->get('toText')->setValue($flightFieldset->get('destination')->getValue())?>
+                                <?= $this->formelement($flightFieldset->get('toText'));?>
+                                <?= $this->formelementerrors($flightFieldset->get('destination'),['class' => 'help-block'])?>
+                            </div>
+                            <div class="form-group departure-group<?php if($flightFieldset->get('departure')->getMessages()) echo "has-error"?>">
+                                <?= $this->formelement($flightFieldset->get('departure'));?>
+                                <?= $this->formelementerrors($flightFieldset->get('departure'),['class' => 'help-block'])?>
+                            </div>
+                        </div>
+                        <?php endforeach;?>
+                        <?php $escaper = new Zend\Escaper\Escaper('utf-8');?>
+    					<span class="template" data-template="<?= $escaper->escapeHtmlAttr($this->partial('backend/partial/multi-city-field'))?>"></span>
+					</div>
+					<div class="quote-form__btn-add-wrap">
+                        <button type="button" class="btn quote-form__btn-add-row js-add-mc-row">
+                            <i class="fa fa-plus"></i>
+                            <span>Add Flight</span>
+                        </button>
+                    </div>
+                </div>
+			</div>
+        	<?= $this->formRow($form->get('notes'));?>
+        	<div class="form-group m-form__group row<?php if($form->get('Passengers')->getMessages()) echo " has-error"?>">
+				<h5 class="m-form__heading-title">Passengers:</h5>
+			</div>
+			<?= $this->formcollection($form->get('Passengers'))?>
+			<?= $this->formelement($form->get('newPassenger'));?>
+        	<div class="form-group m-form__group row<?php if($form->get('PriceQuotes')->getMessages()) echo " has-error"?>">
+				<h5 class="m-form__heading-title">Price Quotes:</h5>
+			</div>
+			<?= $this->formcollection($form->get('PriceQuotes'))?>
+			<?= $this->formelement($form->get('newPrice'));?>
+		</div>
+		<div class="m-portlet__foot m-portlet__foot--fit">
+			<div class="m-form__actions m-form__actions">
+				<div class="row">
+					<div class="col-lg-12 ml-lg-auto">
+						<?= $this->formelement($form->get('submit')->setAttribute('class','btn m-btn m-btn--gradient-from-info m-btn--gradient-to-accent'));?>
+						<?= $this->formelement($form->get('cancel'));?>
+						<button type="button" id="send-quotes" class="pull-right btn m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btn-default">Send E-mail With Price Quotes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?= $this->form()->closeTag()?>
+</div>
+<?php
+$urlCheckout = $this->url('home/checkout',['id' => null]);
+$urlSendMail = $this->url('backend/default',['action' => 'send-quotes','id' => $id]);
+$today = date('m/d/Y');
+$getAirportsUrl = $this->url('home/get_airport');
+$this->inlineScript()->captureStart();
+echo <<<JS
+function returingDate(){
+    if($('.radio-tab input:checked').val() == 'ow'){
+        $('.search-form__option--returning').addClass('disabled');
+        $('.search-form__option--returning input').attr('disabled', true);
+    }else{
+        $('.search-form__option--returning').removeClass('disabled');
+        $('.search-form__option--returning input').attr('disabled', false);
+    }
+}
+var date;
+
+function addCityPart() {
+    var currentCount = $('.search-form__tab--mc > .js-mc-row').length;
+    if(currentCount < 6){
+        var template = $('.search-form__tab--mc > span.template').data('template');
+        template = template.replace(/__flightN__/g, currentCount+1);
+        template = template.replace(/__flight__/g, currentCount);
+        $('.search-form__tab--mc').append(template);
+        initFromTo();
+        initDatePicker();
+    }
+
+    return false;
+}
+
+function removeCityPart(obj){
+    var rowsCnt = $(".js-mc-row").length;
+    if (rowsCnt > 2) {
+        $(obj).parents('.search-form__row').remove();
+        if (rowsCnt === 6) {
+            $('.js-add-mc-row').attr('disabled', false);
+        }
+        $('.js-mc-row').each(function (index) {
+            $(this).find('.search-form__mc-row-nr').html(index+1);
+        });
+    }
+    else {
+        $('#rt').prop("checked", true);
+        switchTabs('#rt');
+    }
+}
+
+var origins = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '$getAirportsUrl%QUERY',
+        wildcard: '%QUERY'
+      }
+    });
+
+function initFromTo(){
+    $('.fromText:not(.tt-input, .tt-hint), .toText:not(.tt-input, .tt-hint)').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        }, {
+          name: 'origins',
+          display: 'id',
+          source: origins,
+          limit:50,
+          templates: {
+            empty: [
+              '<div class="empty-message">',
+                'Not found',
+              '</div>'
+            ].join('\\n'),
+            suggestion: Handlebars.compile('<div>{{city}}, {{country}}, <strong>{{value}}</strong></div>')
+        }
+    });
+    $('.fromText, .toText, #fromText, #toText').bind('typeahead:select typeahead:autocompleted', function(ev, suggestion) {
+        var obj = $(this);
+        var id = $(this).attr('id').replace('Text','');
+        if(suggestion){
+            $('#'+id).val(suggestion.id);
+        }else{
+            $('#'+id).val('');
+        }
+    });
+}
+
+function initDatePicker(){
+    $('.datepicker').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        toggleActive: true,
+        startDate: "$today",
+    });
+    $('#departureDate').datepicker().on('changeDate', function(e){
+        $('#arrivalDate').datepicker('setStartDate', e.date);
+        var newdate = new Date(e.date);
+        newdate.setDate(newdate.getDate() + 7);
+        var dd = newdate.getDate();
+        var mm = newdate.getMonth() + 1;
+        var y = newdate.getFullYear();
+
+        var someFormattedDate = mm + '/' + dd + '/' + y;
+        $('#arrivalDate').datepicker('setDate', someFormattedDate);
+    });
+}
+
+function switchTabs(inputSel) {
+    if (inputSel === 'mc') {
+        $('.search-form__tab').addClass('search-form__tab--mc js-tab-mc');
+        $('.search-form__tab').removeClass('search-form__tab--ow js-tab-rt-ow');
+        $('.quote-form__submit-wrap').addClass('quote-form__submit-mc');
+        $('.quote-form__hint').addClass('hidden');
+        $('.quote-form__btn-add-wrap').removeClass('hidden');
+    }
+    else {
+        $('.search-form__tab').removeClass('search-form__tab--mc js-tab-mc');
+        $('.search-form__tab').addClass('search-form__tab--ow js-tab-rt-ow');
+        $('.quote-form__submit-wrap').removeClass('quote-form__submit-mc');
+        $('.quote-form__hint').removeClass('hidden');
+        $('.quote-form__btn-add-wrap').addClass('hidden');
+    }
+}
+
+$(function(){
+    returingDate();
+    $('.radio-tab input:radio').on('click', function(){
+        returingDate();
+    });
+
+    $('#fromText, #toText').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        }, {
+          name: 'origins',
+          display: 'value',
+          source: origins,
+          limit:50,
+          templates: {
+            empty: [
+              '<div class="empty-message">',
+                'Not found',
+              '</div>'
+            ].join('\\n'),
+            suggestion: Handlebars.compile('<div>{{city}}, {{country}}, <strong>{{value}}</strong></div>')
+        }
+     });
+    initFromTo();
+    initDatePicker();
+
+    $('.js-add-mc-row').on('click', function (e) {
+        var rowsCnt = $(".js-mc-row:visible").length;
+        if (rowsCnt < 6) {
+            addCityPart();
+            if (rowsCnt === 5) {
+                $(this).attr('disabled', 'disabled');
+            }
+        }
+    });
+
+    switchTabs($(".js-trip-type input[type='radio']:checked").attr('value'));
+
+    $(".js-trip-type input[type='radio']").change(function () {
+        switchTabs(this.value);
+    });
+
+    $('#priceQuote fieldset').each(function(idx, obj){
+        if($(obj).find('.id-val').val()){
+            $(obj).find('.send-mail-checkbox').val($(obj).find('.id-val').val());
+            $(obj).find('.send-mail-checkbox').removeClass('hidden');
+
+            $(obj).append('&nbsp;<a target="_blank" class="btn m-btn m-btn--gradient-from-primary m-btn--gradient-to-success" href="$urlCheckout'+$(obj).find('.id-val').val()+'">Preview checkout</a>')
+        }
+    });
+
+    $("#send-quotes").on('click',function(){
+    	var idsToSend = [];
+    	$.each($('.send-mail-checkbox:checked'), function(key, obj){
+    		idsToSend.push(obj.value);
+    	});
+
+        if (idsToSend.length > 0 ){
+            if (confirm('Are you sure?')) {
+            	$.post( "$urlSendMail", {ids: idsToSend}, function( data ) {
+            	  if(data.success){
+            		  alert('Mail was send');
+            	  }else{
+                     alert(data.message);
+                    }
+            	}, "json");
+    		}
+        }else{
+            alert('Check some price quotes to send!');
+        }
+
+    });
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

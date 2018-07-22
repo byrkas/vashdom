@@ -1,0 +1,160 @@
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">Checkout</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/default',['action' => 'checkout'])?>" class="m-nav__link">
+						<span class="m-nav__link-text">Checkout</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<?= $this->showMessages()?>
+	<div class="m-portlet m-portlet--mobile">
+		<?= $this->partial('backend/partial/portlet-head',['title' => 'Checkout list'])?>
+		<div class="m-portlet__body">
+			<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+				<div class="row align-items-center">
+    				<?= $this->partial('backend/partial/tbl-search')?>
+    				<?= $this->partial('backend/partial/tbl-selected')?>
+    			</div>
+			</div>
+			<table id="table-data" class="m_datatable" width="100%"></table>
+		</div>
+	</div>
+</div>
+<?php
+$urlGetData = $this->url('backend/default',['action' => 'get-checkout']);
+$urlView = $this->url('backend/default',['action' => 'checkout-info']);
+$urlDiscount = $this->url('backend/default',['action'=>'user-info']);
+$this->inlineScript()->captureStart();
+echo <<<JS
+var DatatableRecordSelectionDemo = function() {
+    var t = function() {
+        var t = $(".m_datatable").mDatatable({
+	            data: {
+	                type: "remote",
+	                source: {
+	                    read: {
+	                        url: "$urlGetData"
+	                    }
+	                },
+	                pageSize: 20,
+	                saveState: {
+	                    cookie: !0,
+	                    webstorage: !0
+	                },
+	                serverPaging: !0,
+	                serverFiltering: !0,
+	                serverSorting: !0
+	            },
+	            layout: {
+	                theme: "default",
+	                class: "",
+	                scroll: !0,
+	                height: "auto",
+	                footer: !1
+	            },
+	            sortable: !0,
+	            toolbar: {
+	                placement: ["bottom"],
+	                items: {
+	                    pagination: {
+	                        pageSizeSelect: [5, 10, 20, 30, 50]
+	                    }
+	                }
+	            },
+                columns: [{
+                    field: "quoteUid",
+                    title: "Quote UID",
+                    textAlign: "left",
+                },{
+                    field: "email",
+                    title: "Email",
+                    textAlign: "left",
+                    width: 200,
+                    template: function(data) {
+                        if(data.email)
+                            return '<a class="m-link" href="mailto:' + data.email + '">' + data.email + '</a>';
+                      },
+                },{
+                    field: "phone",
+                    title: "Phone",
+                    textAlign: "left",
+                },{
+                    field: "country",
+                    title: "Country",
+                    textAlign: "left",
+                },{
+                    field: "city",
+                    title: "City",
+                    textAlign: "left",
+                },{
+                    field: "address",
+                    title: "Address",
+                    textAlign: "left",
+                },{
+                    field: "zip",
+                    title: "Zip",
+                    textAlign: "left",
+                },{
+                    field: "created",
+                    title: "Date",
+                    textAlign: "left",
+                },{
+                    field: "Actions",
+                    width: 100,
+                    title: "Actions",
+                    sortable: !1,
+                    textAlign: "right",
+                    template: function(t) {
+                        var result = '';
+                        result +='<a href="$urlView'+t.id+'" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit details">\t\t\t\t\t\t\t<i class="la la-edit"></i>\t\t\t\t\t\t</a>'
+                        return result;
+                    }
+                }]
+            }),
+            e = t.getDataSourceQuery();
+        $("#m_form_search").on("keyup", function(e) {
+            var a = t.getDataSourceQuery();
+            a.generalSearch = $(this).val().toLowerCase(), t.setDataSourceQuery(a), t.load()
+        }).val(e.generalSearch),
+        $(".m_datatable").on("m-datatable--on-check", function(e, a) {
+            var l = t.setSelectedRecords().getSelectedRecords().length;
+            $("#m_datatable_selected_number").html(l), l > 0 && $("#m_datatable_group_action_form").collapse("show")
+        }).on("m-datatable--on-uncheck m-datatable--on-layout-updated", function(e, a) {
+            var l = t.setSelectedRecords().getSelectedRecords().length;
+            $("#m_datatable_selected_number").html(l), 0 === l && $("#m_datatable_group_action_form").collapse("hide")
+        })
+    };
+    return {
+        init: function() {
+            t()
+        }
+    }
+}();
+
+function deleteData(url, postData, t){
+	$.post( url, postData, function( data ) {
+	  if(data.success){
+		  t.reload();
+	  }
+	}, "json");
+}
+
+jQuery(document).ready(function() {
+    DatatableRecordSelectionDemo.init()
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

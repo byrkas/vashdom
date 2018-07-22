@@ -1,0 +1,38 @@
+<?php if(isset($this->layout()->languages) && count($this->layout()->languages) > 1):?>
+	<ul class="nav nav-tabs  m-tabs-line" role="tablist">
+	<?php foreach ($this->layout()->languages as $key => $lang):?>
+	<li class="nav-item m-tabs__item">
+		<a class="nav-link m-tabs__link <?php if((!isset($this->activeLang) && $this->layout()->locale == $lang['locale']) || $this->activeLang == $lang['locale'] ) echo "active "?>show" data-toggle="tab" href="#m_tabs_<?= $lang['locale']?>" role="tab" aria-selected="true"><?= $lang['name']?></a>
+	</li>
+	<?php endforeach;?>
+	</ul>
+<?php endif;?>
+<?php
+$activeLocale = $this->layout()->locale;
+$defaultLocale = $this->layout()->default_locale;
+
+$this->inlineScript()->captureStart();
+echo <<<JS
+$(function(){
+    $('#m_tabs_$activeLocale').addClass('active show');
+    if($('.tab-content fieldset').length > 0){
+        $( ".name-$defaultLocale" ).parent('.form-group').replaceWith($('#name').parent('.form-group'));
+        $( ".label-$defaultLocale" ).parent('.form-group').replaceWith($('#label').parent('.form-group'));
+        $( ".value-$defaultLocale" ).parent('.form-group').replaceWith($('#value').parent('.form-group'));
+        $( ".title-$defaultLocale" ).parent('.form-group').replaceWith($('#title').parent('.form-group'));
+        $( ".slug-$defaultLocale" ).parent('.form-group').replaceWith($('#slug').parent('.form-group'));
+        $( ".content-$defaultLocale" ).parent('.form-group').replaceWith($('#content').parent('.form-group'));
+        $( ".description-$defaultLocale" ).parent('.form-group').replaceWith($('#description').parent('.form-group'));
+        $( ".aboutCity-$defaultLocale" ).parent('.form-group').replaceWith($('#aboutCity').parent('.form-group'));
+        $( ".aboutAirport-$defaultLocale" ).parent('.form-group').replaceWith($('#aboutAirport').parent('.form-group'));
+        $( ".textMember-$defaultLocale" ).parent('.form-group').replaceWith($('#textMember').parent('.form-group'));
+        $( ".textShort-$defaultLocale" ).parent('.form-group').replaceWith($('#textShort').parent('.form-group'));
+        $( ".textWhy-$defaultLocale" ).parent('.form-group').replaceWith($('#textWhy').parent('.form-group'));
+        $( ".textDescription-$defaultLocale" ).parent('.form-group').replaceWith($('#textDescription').parent('.form-group'));
+        $( ".fareText-$defaultLocale" ).parent('.form-group').replaceWith($('#fareText').parent('.form-group'));
+        $( ".fareTextBusiness-$defaultLocale" ).parent('.form-group').replaceWith($('#fareTextBusiness').parent('.form-group'));
+    }
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

@@ -1,0 +1,15 @@
+<div class="search-form__row js-mc-row row">
+    <span class="search-form__mc-row-nr">__flightN__</span>
+    <a href="javascript:void(0)" onclick="removeCityPart(this)" class="search-form__mc-row-del js-del-row"></a>
+    <div class="form-group origin-group">
+    	<input type="hidden" name="QuoteFlights[__flight__][origin]" id="from-__flightN__" value="">
+        <input type="text" class="form-control fromText" name="QuoteFlights[__flight__][fromText]" id="fromText-__flightN__" placeholder="From">
+    </div>
+    <div class="form-group destination-groupn">
+    	<input type="hidden" name="QuoteFlights[__flight__][destination]" id="to-__flightN__" value="">
+        <input type="text" name="QuoteFlights[__flight__][toText]" class="form-control toText" id="toText-__flightN__"  placeholder="To">
+    </div>
+    <div class="form-group departure-group">
+        <input type="text" class="form-control datepicker" name="QuoteFlights[__flight__][departure]" id="departure-__flightN__" placeholder="Date">
+    </div>
+</div>

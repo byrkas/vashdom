@@ -1,0 +1,213 @@
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">Quotes</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/default',['action' => 'quotes'])?>" class="m-nav__link">
+						<span class="m-nav__link-text">Quotes</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<?= $this->showMessages()?>
+	<div class="m-portlet m-portlet--mobile">
+		<?= $this->partial('backend/partial/portlet-head',['title' => 'Quotes list'])?>
+		<div class="m-portlet__body">
+			<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+				<div class="row align-items-center">
+    				<?= $this->partial('backend/partial/tbl-search')?>
+    				<?= $this->partial('backend/partial/tbl-selected')?>
+    			</div>
+			</div>
+			<table id="table-data" class="m_datatable" width="100%"></table>
+		</div>
+	</div>
+</div>
+<?php
+$urlGetData = $this->url('backend/default',['action' => 'get-quotes']);
+$urlDelete = $this->url('backend/default',['action' => 'delete-quotes']);
+$urlView = $this->url('backend/default',['action' => 'view-quote']);
+$urlDone = $this->url('backend/default',['action' => 'done-quotes']);
+$urlDiscount = $this->url('backend/default',['action'=>'user-info']);
+$this->inlineScript()->captureStart();
+echo <<<JS
+var DatatableRecordSelectionDemo = function() {
+    var t = function() {
+        var t = $(".m_datatable").mDatatable({
+	            data: {
+	                type: "remote",
+	                source: {
+	                    read: {
+	                        url: "$urlGetData"
+	                    }
+	                },
+	                pageSize: 20,
+	                saveState: {
+	                    cookie: !0,
+	                    webstorage: !0
+	                },
+	                serverPaging: !0,
+	                serverFiltering: !0,
+	                serverSorting: !0
+	            },
+	            layout: {
+	                theme: "default",
+	                class: "",
+	                scroll: !0,
+	                height: "auto",
+	                footer: !1
+	            },
+	            sortable: !0,
+	            toolbar: {
+	                placement: ["bottom"],
+	                items: {
+	                    pagination: {
+	                        pageSizeSelect: [5, 10, 20, 30, 50]
+	                    }
+	                }
+	            },
+                columns: [{
+                    field: "id",
+                    title: "#",
+                    sortable: !1,
+                    width: 40,
+                    textAlign: "center",
+                    selector: {
+                        class: "m-checkbox--solid m-checkbox--brand"
+                    }
+                },{
+                    field: "name",
+                    title: "Name",
+                    textAlign: "left",
+                },{
+                    field: "email",
+                    title: "Email",
+                    textAlign: "left",
+                    width: 200,
+                    template: function(data) {
+                        if(data.email)
+                            return '<a class="m-link" href="mailto:' + data.email + '">' + data.email + '</a>';
+                      },
+                },{
+                    field: "phone",
+                    title: "Phone",
+                    textAlign: "left",
+                },{
+                    field: "created",
+                    title: "Date",
+                    textAlign: "left",
+                },{
+                    field: "discountId",
+                    title: "Discount ID",
+                    textAlign: "left",
+                    template: function(data) {
+                        if(data.discountId)
+                            return '<a class="m-link" href="$urlDiscount' + data.discountId + '">' + data.discountId + '</a>';
+                      },
+                },{
+                    field: "flight",
+                    title: "Flight",
+                    sortable: !1,
+                    textAlign: "left",
+                },{
+                    field: "pqs",
+                    title: "PQ",
+                    textAlign: "left",
+                },{
+                    field: "done",
+                    title: "Done",
+                    textAlign: "left",
+                    width: 40,
+                    template: function(t) {
+                        if(!t.done)
+                            return '<i class="la la-circle m--font-secondary"></i>'
+                        else
+                            return '<i class="la la-check-circle-o m--font-accent"></i>'
+                    }
+                },{
+                    field: "Actions",
+                    width: 100,
+                    title: "Actions",
+                    sortable: !1,
+                    textAlign: "right",
+                    template: function(t) {
+                        var result = '';
+                        if(t.done != 1)
+                            result += '<a href="javascript:void(0)" data-id="'+t.id+'" class="done-btn m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Done">\t\t\t\t\t\t\t<i class="la la-check-circle-o"></i>\t\t\t\t\t\t</a>';
+                        result +='<a href="$urlView'+t.id+'" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Edit details">\t\t\t\t\t\t\t<i class="la la-edit"></i>\t\t\t\t\t\t</a>'
+                        result +='<a href="javascript:void(0)" data-id="'+t.id+'" class="delete-btn m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">\t\t\t\t\t\t\t<i class="la la-trash"></i>\t\t\t\t\t\t</a>'
+                        return result;
+                    }
+                }]
+            }),
+            e = t.getDataSourceQuery();
+        $("#m_form_search").on("keyup", function(e) {
+            var a = t.getDataSourceQuery();
+            a.generalSearch = $(this).val().toLowerCase(), t.setDataSourceQuery(a), t.load()
+        }).val(e.generalSearch),
+        $(".m_datatable").on("m-datatable--on-check", function(e, a) {
+            var l = t.setSelectedRecords().getSelectedRecords().length;
+            $("#m_datatable_selected_number").html(l), l > 0 && $("#m_datatable_group_action_form").collapse("show")
+        }).on("m-datatable--on-uncheck m-datatable--on-layout-updated", function(e, a) {
+            var l = t.setSelectedRecords().getSelectedRecords().length;
+            $("#m_datatable_selected_number").html(l), 0 === l && $("#m_datatable_group_action_form").collapse("hide")
+        }),
+        $("#m_datatable_check_all").on('click',function(){
+        	var idsToDelete = [];
+        	$.each(t.getSelectedRecords(), function(key, val){
+        		idsToDelete.push($(val).find('input[type=checkbox]').val());
+        	});
+        	if (confirm('Are you sure?')) {
+        		deleteData('$urlDelete',{ids: idsToDelete},t);
+    		}
+        }),
+        $(".m_datatable").on('click','.delete-btn',function(e){
+        	e.preventDefault();
+        	var idsToDelete = [];
+        	idsToDelete.push($(this).data('id'));
+
+        	if (confirm('Are you sure?')) {
+        		deleteData('$urlDelete',{ids: idsToDelete},t);
+    		}
+        }),
+        $(".m_datatable").on('click','.done-btn',function(e){
+        	e.preventDefault();
+        	var idsToDelete = [];
+        	idsToDelete.push($(this).data('id'));
+
+        	if (confirm('Are you sure?')) {
+        		deleteData('$urlDone',{ids: idsToDelete},t);
+    		}
+        })
+    };
+    return {
+        init: function() {
+            t()
+        }
+    }
+}();
+
+function deleteData(url, postData, t){
+	$.post( url, postData, function( data ) {
+	  if(data.success){
+		  t.reload();
+	  }
+	}, "json");
+}
+
+jQuery(document).ready(function() {
+    DatatableRecordSelectionDemo.init()
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

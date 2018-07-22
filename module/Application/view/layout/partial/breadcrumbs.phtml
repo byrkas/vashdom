@@ -1,0 +1,16 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item">
+      <a href="<?= $this->url('home/lang',['lang' => $this->layout()->lang]) ?>"><?= $this->translate('Home')?></a>
+    </li>
+    <?php foreach ($this->pages as $key => $page): ?>
+    <?php if ($key < count($this->pages) - 1): ?>
+    <li class="breadcrumb-item">
+      <a href="<?= $page->getHref() ?>"><?= $page->getLabel() ?></a>
+    </li>
+    <?php else:?>
+    <li class="breadcrumb-item active">
+      <?= $page->getLabel() ?>
+    </li>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</ol>

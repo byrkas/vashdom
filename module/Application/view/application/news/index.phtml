@@ -1,0 +1,33 @@
+<?php $this->headTitle($this->translate('Latest news'));?>
+<div class="cover cover--static">
+    <div class="cover-content">
+        <div class="container">
+            <h1 class="page-title"><?= $this->translate('Latest news')?></h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= $this->url('home/lang',['lang' => $this->layout()->lang])?>"><?= $this->translate('Home')?></a></li>
+                <li class="breadcrumb-item active"><?= $this->translate('Latest news')?></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="content content-static">
+    <div class="news">
+        <div class="container">
+            <div class="news__list">
+            	<?php foreach ($this->data as $entry):?>
+                <article class="news__item">
+                    <div class="news__date"><?= $entry['publishDate']->format('m/d/Y')?></div>
+                    <h3 class="news__title">
+                        <a href="<?= $this->url('home/news_page',['lang' => $this->layout()->lang, 'slug' => $entry['slug']])?>">
+                        <?= $entry['title']?>
+                        </a>
+                    </h3>
+                    <div class="news__text"><?= $entry['description']?></div>
+                    <a href="<?= $this->url('home/news_page',['lang' => $this->layout()->lang, 'slug' => $entry['slug']])?>" class="news__link-more"><span><?= $this->translate('Read More')?></span></a>
+                </article>
+
+                <?php endforeach;?>
+            </div>
+        </div>
+    </div>
+</div>

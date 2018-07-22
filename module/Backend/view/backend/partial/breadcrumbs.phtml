@@ -1,0 +1,12 @@
+<?php $count = count($this->pages)?>
+<?php if($count):?>
+<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+<?php foreach ($this->pages as $page):?>
+    <?php if(--$count == 0):?>
+       <li class="m-nav__item"><?php echo $page->getLabel()?></li>
+    <?php else:?>
+    <li class="m-nav__item"><a href="<?php echo $page->getHref()?>"><?php echo $page->getLabel()?></a></li>
+    <?php endif;?>
+<?php endforeach;?>
+</ul>
+<?php endif;?>

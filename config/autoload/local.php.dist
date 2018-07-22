@@ -1,0 +1,53 @@
+<?php
+return [
+    'db' => [
+        'driver'         => 'Pdo',
+        'username'       => 'root',
+        'dsn'            => 'mysql:dname=;host=localhost',
+        'driver_options' => [
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        ],
+    ],
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'params' => [
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'user' => '',
+                    'password' => '',
+                    'dbname' => '',
+                    'charset' => 'UTF8',
+                    'driverOptions' => [
+                        1002 => 'SET NAMES UTF8'
+                    ]
+                ]
+            ]
+        ],
+        'configuration' => [
+            'orm_default' => [
+            ]
+        ]
+    ],
+    'media' =>  [
+        'img' =>  'public/media/img',
+    ],
+    'smtp' => [
+        //'info_to' => '',
+        'username' => '',
+        'password' => '',
+    ],
+    'bo' => [
+        'send' => true,
+        'apiKey' => '',
+        'createLead' => 'http://backoffice.domain/api/v1/flight-request/create-lead',
+        'updateLead' => 'http://backoffice.domain/api/v1/flight-request/update-lead',
+        'getQuoteInfo' => 'http://backoffice.domain/api/v1/quote/get-info',
+        'bookQuote' => 'http://backoffice.domain/api/v1/quote/book-quote',
+        'salesView' => 'http://backoffice.domain/admin/sales/update?id='
+    ],
+    'neutrino' => [
+        'userId' => '',
+        'apiKey' => ''
+    ],
+];

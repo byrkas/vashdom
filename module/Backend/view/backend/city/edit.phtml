@@ -1,0 +1,99 @@
+<div class="m-subheader">
+	<div class="d-flex align-items-center">
+ 		<div class="mr-auto">
+ 			<h3 class="m-subheader__title m-subheader__title--separator">Cities</h3>
+ 			<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+				<li class="m-nav__item m-nav__item--home">
+					<a href="<?= $this->url('backend')?>" class="m-nav__link m-nav__link--icon">
+					   <i class="m-nav__link-icon la la-home"></i>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="<?= $this->url('backend/city')?>" class="m-nav__link">
+						<span class="m-nav__link-text">Cities</span>
+					</a>
+				</li>
+				<li class="m-nav__separator">-</li>
+				<li class="m-nav__item">
+					<a href="" class="m-nav__link">
+						<span class="m-nav__link-text">Edit city</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m-content">
+	<?php $form->prepare(); echo $this->form()->openTag($form);?>
+	<div class="m-portlet m-portlet--info m-portlet--head-solid-bg m-portlet--bordered">
+		<?= $this->partial('backend/partial/portlet-head',['title' => 'Edit city'])?>
+		<div class="m-portlet__body">
+			<?= $this->showMessages()?>
+			<?= $this->partial('backend/partial/translate-form-part')?>
+			<div class="row">
+            	<div class="col-lg-6">
+    				<?= $this->formcollection($form->get('translations'))?>
+                	<?= $this->formRow($form->get('name'));?>
+            	</div>
+            	<div class="col-lg-6">
+            		<?= $this->formRow($form->get('Region'));?>
+        			<?= $this->formRow($form->get('Country'));?>
+            	</div>
+        	</div>
+		</div>
+		<div class="m-portlet__foot m-portlet__foot--fit">
+			<div class="m-form__actions m-form__actions">
+				<div class="row">
+					<div class="col-lg-12 ml-lg-auto">
+						<?= $this->formelement($form->get('submit')->setAttribute('class','btn m-btn m-btn--gradient-from-info m-btn--gradient-to-accent'));?>
+						<?= $this->formelement($form->get('cancel'));?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?= $this->form()->closeTag()?>
+</div>
+<?php
+$imagePreview = $imgPreview['image'];
+$this->inlineScript()->captureStart();
+echo <<<JS
+var imgPreview = {'image':'$imagePreview'};
+function reloadImg(type){
+    $('#remove-'+type).val(0);
+    document.getElementById(type+"-preview").src = imgPreview[type];
+}
+function removeImg(type){
+    $('#remove-'+type).val(1);
+    $('#'+type+'-file').val('');
+    document.getElementById(type+"-preview").src = '';
+}
+function onFileChange(type){
+    document.getElementById(type+"-file").onchange = function () {
+        $('#remove-'+type).val(0);
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById(type+"-preview").src = e.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+    };
+}
+onFileChange('image');
+jQuery(document).ready(function() {
+    $("#region").select2({
+      placeholder: "Choose region",
+      allowClear: true
+    }),
+    $("#country").select2({
+      placeholder: "Choose country",
+      allowClear: true
+    }),
+    $("#airports").select2({
+      placeholder: "Airports IATA",
+      allowClear: true,tags:!0
+    })
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

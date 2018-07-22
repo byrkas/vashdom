@@ -1,0 +1,42 @@
+<footer class="footer">
+    <!--Footer Main Block-->
+    <div class="footer-content">
+        <div class="container">
+            <div class="footer-content__company">
+                <div class="footer-logo">
+                    <img src="/images/logo-colored.svg" alt="">
+                </div>
+                <h5 class="footer-content__company-title"><?= $this->settingValue('footer_company_title')?></h5>
+                <?= $this->settingValue('footer_company_text')?>
+            </div>
+            <div class="footer-content__nav">
+                <?= $this->navigation('Zend\Navigation\Footer')->menu()->setPartial('partial/footer-menu')?>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Footer Text-->
+    <?php if(isset($this->layout()->showDisclaimer)):?>
+    <div class="footer-text">
+        <div class="container">
+            <a class="footer-text__expand-link" data-toggle="collapse" href="#footer-disclaimer"><?= $this->translate('Disclaimer')?></a>
+            <div class="footer-text__expand collapse" id="footer-disclaimer">
+            	<?= $this->settingValue('footer_disclaimer')?>
+            </div>
+        </div>
+    </div>
+	<?php endif;?>
+
+    <!--Footer Badges-->
+    <?= $this->partners()?>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="footer-bottom__copy"><?= date('Y')?> © <?= $this->settingValue('footer_all_rights')?></div>
+            <?= $this->socials()?>
+        </div>
+    </div>
+
+</footer>
